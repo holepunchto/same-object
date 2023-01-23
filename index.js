@@ -1,6 +1,8 @@
 const deepEql = require('deep-eql')
 
-module.exports = function (a, b, { strict = false } = {}) {
+module.exports = sameObject
+
+function sameObject (a, b, { strict = false } = {}) {
   return deepEql(a, b, { comparator: strict ? null : loose })
 }
 
