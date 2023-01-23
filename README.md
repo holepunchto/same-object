@@ -8,6 +8,9 @@ npm install same-object
 
 Supports circular references, Maps, Symbols, etc. Based on: [chaijs/deep-eql](https://github.com/chaijs/deep-eql)
 
+Aims for ~99% compatibility with `deep-equal` without requiring native dependencies.
+Useful for JavaScript runtimes without native Node modules like `util`, etc.
+
 ## Usage
 ``` js
 const sameObject = require('same-object')
