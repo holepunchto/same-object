@@ -28,6 +28,13 @@ console.log(sameObject({ foo: 1 }, { foo: 1, bar: true })) // false
 
 Compares `a` and `b`, returning whether they are equal or not.
 
+Available `options`:
+```js
+{
+  strict: false
+}
+```
+
 Loosely comparison (`==`) by default.\
 Use `{ strict: true }` for a stronger equality check (`===`).
 
