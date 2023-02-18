@@ -35,8 +35,6 @@ function same (a, b, opts, memos) {
     case 'Promise':
     case 'Symbol':
     case 'function':
-    // case 'WeakMap':
-    // case 'WeakSet':
       return a === b
   }
 
@@ -45,7 +43,6 @@ function same (a, b, opts, memos) {
   }
 
   switch (aType) {
-    // case 'Arguments':
     case 'Int8Array':
     case 'Uint8Array':
     case 'Uint8ClampedArray':
@@ -55,7 +52,6 @@ function same (a, b, opts, memos) {
     case 'Uint32Array':
     case 'Float32Array':
     case 'Float64Array':
-    // case 'Array':
       return sameIterable(a, b, opts, memos)
     case 'DataView':
       return sameIterable(new Uint8Array(a.buffer, a.byteOffset, a.byteLength), new Uint8Array(b.buffer, b.byteOffset, b.byteLength), opts, memos)
@@ -63,13 +59,7 @@ function same (a, b, opts, memos) {
       return sameIterable(new Uint8Array(a), new Uint8Array(b), opts, memos)
   }
 
-  if (aType === 'RegExp') return sameRegExp(a, b) // a.toString() === b.toString()
-
-  // if (aType === 'Generator') {}
-
-  // typed array, buffer, arraybuffer, sharedarraybuffer
-
-  // if (!sameKeys(a, b, opts, memos)) return false
+  if (aType === 'RegExp') return sameRegExp(a, b)
 
   if (!memos) {
     memos = { a: new Map(), b: new Map(), position: 0 }
@@ -89,10 +79,6 @@ function same (a, b, opts, memos) {
 
   memos.a.delete(a)
   memos.b.delete(b)
-
-  // if (aType === 'Object') {}
-
-  // set, map
 
   return equals
 }
@@ -118,7 +104,6 @@ function sameObject (a, b, opts, memos, aType = null) {
 }
 
 function sameRegExp (a, b) {
-  // return a.toString() === b.toString()
   return a.source === b.source && a.flags === b.flags
 }
 
