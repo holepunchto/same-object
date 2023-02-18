@@ -42,8 +42,7 @@ Loosely comparison (`==`) by default.\
 Use `{ strict: true }` for a stronger equality check (`===`).
 
 ## References
-The source code is based on:
-
+The source code is based on:\
 [node/comparisons.js](https://github.com/nodejs/node/blob/2adea16e394448c4c87b0639514f8babbeb7a080/lib/internal/util/comparisons.js)\
 [inspect-js/node-deep-equal](https://github.com/inspect-js/node-deep-equal)\
 [chaijs/deep-eql](https://github.com/chaijs/deep-eql)
