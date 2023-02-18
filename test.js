@@ -459,6 +459,22 @@ test('Arrays', function (t) {
   d[1] = 'test'
   unlikeLoosely(t, c, d, 'sparse array')
 
+  const e = [undefined, 'test', undefined, undefined, 'test2', undefined]
+  const f = []
+  e[1] = 'test'
+  e[4] = 'test2'
+  unlikeLoosely(t, e, f, 'sparse array')
+
+  const g = new Array(10)
+  const h = new Array(10)
+  g[2] = 'test'
+  g[5] = 'test2'
+  g[8] = 'test3'
+  h[2] = 'test'
+  h[5] = 'test2'
+  h[8] = 'test3'
+  alike(t, g, h, 'sparse array')
+
   t.end()
 })
 

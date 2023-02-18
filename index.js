@@ -3,11 +3,6 @@ module.exports = function (a, b, opts) {
 }
 
 function same (a, b, opts, memos) {
-  /* if (a === b) {
-    if (a !== 0) return true
-    return opts && opts.strict ? Object.is(a, b) : true
-  } */
-
   const aIsPrimitive = isPrimitive(a)
   const bIsPrimitive = isPrimitive(b)
 
@@ -173,26 +168,29 @@ function sameArray (a, b, opts, memos) {
   return keyCheck(val1, val2, strict, memos, kIsArray, keys1) */
 
   for (let i = 0; i < a.length; i++) {
-    if (Object.prototype.hasOwnProperty.call(a, i)) {
-      if (!Object.prototype.hasOwnProperty.call(b, i) ||
-          !same(a[i], b[i], opts, memos)) {
+    const aHasProperty = Object.prototype.hasOwnProperty.call(a, i)
+    const bHasProperty = Object.prototype.hasOwnProperty.call(b, i)
+
+    if (aHasProperty) {
+      if (!bHasProperty || !same(a[i], b[i], opts, memos)) {
         return false
       }
-    } else if (Object.prototype.hasOwnProperty.call(b, i)) {
+    } else if (bHasProperty) {
       return false
     } else {
-      // Array is sparse.
-      const keysA = Object.keys(a)
-      for (; i < keysA.length; i++) {
-        const key = keysA[i]
+      // Array is sparse
+      const aKeys = Object.keys(a)
+
+      for (; i < aKeys.length; i++) {
+        const key = aKeys[i]
         if (!Object.prototype.hasOwnProperty.call(b, key) ||
             !same(a[key], b[key], opts, memos)) {
           return false
         }
       }
-      if (keysA.length !== Object.keys(b).length) {
-        return false
-      }
+
+      if (aKeys.length !== Object.keys(b).length) return false
+
       return true // + can stop here
     }
   }
