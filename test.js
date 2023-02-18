@@ -652,8 +652,10 @@ test('NaNs', function (t) {
 
 test('zeroes', function (t) {
   alikeLoosely(t, 0, -0, '0 and -0', true, false)
+  unlike(t, 0, -0, '0 and -0', true, false)
 
   alikeLoosely(t, { a: 0 }, { a: -0 }, 'two objects with a same-keyed 0/-0 value', true, false)
+  unlike(t, { a: 0 }, { a: -0 }, 'two objects with a same-keyed 0/-0 value', true, false)
 
   t.end()
 })
