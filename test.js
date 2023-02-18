@@ -1,5 +1,8 @@
 const test = require('brittle')
 const sameObject = require('./')
+const deepEqual = require('deep-equal')
+
+test.configure({ bail: true })
 
 // NOTE: most tests were copied and adapted from deep-equal library
 
@@ -196,15 +199,29 @@ test('Sets', function (t) {
     'two inequal Sets'
   )
 
-  // +
-  /* alikeLoosely(t,
+  alikeLoosely(t,
     new Set([null, '', 1, 5, 2, false]),
     new Set([undefined, 0, '5', true, '2', '-000']),
     'more primitive comparisons'
-  ) */
+  )
 
-  // +
-  // alike(t, new Set([new Set([1, 2]), new Set([3, 4])]), new Set([new Set([4, 3]), new Set([2, 1])]))
+  alike(t,
+    new Set([1, 2]),
+    new Set([2, 1]),
+    'primitives in different keys'
+  )
+
+  alike(t,
+    new Set([{ a: 1 }, { b: 2 }]),
+    new Set([{ b: 2 }, { a: 1 }]),
+    'object values in different keys'
+  )
+
+  alike(t,
+    new Set([new Set([1, 2]), new Set([3, 4])]),
+    new Set([new Set([4, 3]), new Set([2, 1])]),
+    'Set of Sets, all in different keys'
+  )
 })
 
 test('Set and Map', function (t) {
@@ -214,7 +231,6 @@ test('Set and Map', function (t) {
     'Map and Set'
   )
 
-  // +
   /* const maplikeSet = new Set()
   Object.defineProperty(maplikeSet, 'constructor', { enumerable: false, value: Map })
   maplikeSet.__proto__ = Map.prototype // eslint-disable-line no-proto
@@ -355,7 +371,6 @@ test('Dates', function (t) {
 })
 
 test('buffers', { skip: typeof Buffer !== 'function' }, function (t) {
-  /* eslint no-buffer-constructor: 1, new-cap: 1 */
   alike(t,
     safeBuffer('xyz'),
     safeBuffer('xyz'),
@@ -435,7 +450,7 @@ test('buffers', { skip: typeof Buffer !== 'function' }, function (t) {
 })
 
 // +
-test.skip('Arrays', function (t) {
+test('Arrays', function (t) {
   const a = []
   const b = []
   b.foo = true
@@ -909,20 +924,21 @@ test('getters', { skip: !Object.defineProperty }, function (t) {
 
 test('fake arrays: extra keys will be tested', { skip: !hasDunderProto }, function (t) {
   // +
-  /* const a = tag({
+  const a = tag({
     __proto__: Array.prototype,
     0: 1,
     1: 1,
     2: 'broken',
     length: 2
   }, 'Array')
+
   if (Object.defineProperty) {
     Object.defineProperty(a, 'length', {
       enumerable: false
     })
   }
 
-  unlikeLoosely(t,a, [1, 1], 'fake and real array with same contents and [[Prototype]]', false, false) */
+  unlikeLoosely(t, a, [1, 1], 'fake and real array with same contents and [[Prototype]]', false, false)
 
   const b = tag(/abc/, 'Array')
   b.__proto__ = Array.prototype // eslint-disable-line no-proto
@@ -1140,8 +1156,8 @@ test('numbers', function (t) {
   alike(t, Infinity, Infinity, 'Infinity', true, true)
 
   // + ?
-  alike(t, NaN, NaN, 'NaN', true, true)
-  unlikeLoosely(t, NaN, NaN, 'NaN', false, false)
+  alike(t, NaN, NaN, 'NaN (alike)', true, true)
+  unlikeLoosely(t, NaN, NaN, 'NaN (unlike loosely)', false, false)
 })
 
 // +
@@ -1205,10 +1221,12 @@ test('circular references x2', function (t) {
 
 function alike (t, a, b, comment = '') {
   try {
-    t.alike(a, b, '[brittle normal] ' + comment)
+    // + NOTE: it should use deep-equal instead of t / t.alike
+    t.ok(deepEqual(a, b, { strict: true }), '[deep-equal normal] ' + comment)
+    // t.alike(a, b, '[brittle normal] ' + comment)
     // t.alike(b, a, '[brittle reversed] ' + comment)
   } catch (error) {
-    if (error.message === 'Cannot convert a Symbol value to a string') t.comment('alike => ' + error.message + ' [brittle] ' + comment)
+    if (error.message === 'Cannot convert a Symbol value to a string') t.comment('alike => ' + error.message + ' [deep-equal] ' + comment)
     else throw error
   }
 
@@ -1218,10 +1236,10 @@ function alike (t, a, b, comment = '') {
 
 function alikeLoosely (t, a, b, comment = '') { // eslint-disable-line no-unused-vars
   try {
-    t.alike.coercively(a, b, '[brittle normal] ' + comment)
+    t.ok(deepEqual(a, b, { strict: false }), '[deep-equal normal] ' + comment)
     // t.alike.coercively(b, a, '[brittle reversed] ' + comment)
   } catch (error) {
-    if (error.message === 'Cannot convert a Symbol value to a string') t.comment('alike loosely => ' + error.message + ' [brittle] ' + comment)
+    if (error.message === 'Cannot convert a Symbol value to a string') t.comment('alike loosely => ' + error.message + ' [deep-equal] ' + comment)
     else throw error
   }
 
@@ -1231,10 +1249,11 @@ function alikeLoosely (t, a, b, comment = '') { // eslint-disable-line no-unused
 
 function unlike (t, a, b, comment = '') {
   try {
-    t.unlike(a, b, '[brittle normal] ' + comment)
+    t.absent(deepEqual(a, b, { strict: true }), '[deep-equal normal] ' + comment)
+    // t.unlike(a, b, '[brittle normal] ' + comment)
     // t.unlike(b, a, '[brittle reversed] ' + comment)
   } catch (error) {
-    if (error.message === 'Cannot convert a Symbol value to a string') t.comment('unlike => ' + error.message + ' [brittle] ' + comment)
+    if (error.message === 'Cannot convert a Symbol value to a string') t.comment('unlike => ' + error.message + ' [deep-equal] ' + comment)
     else throw error
   }
 
@@ -1244,10 +1263,11 @@ function unlike (t, a, b, comment = '') {
 
 function unlikeLoosely (t, a, b, comment = '') { // eslint-disable-line no-unused-vars
   try {
-    t.unlike.coercively(a, b, '[brittle normal] ' + comment)
+    t.absent(deepEqual(a, b, { strict: false }), '[deep-equal normal] ' + comment)
+    // t.unlike.coercively(a, b, '[deep-equal normal] ' + comment)
     // t.unlike.coercively(b, a, '[brittle reversed] ' + comment)
   } catch (error) {
-    if (error.message === 'Cannot convert a Symbol value to a string') t.comment('unlike loosely => ' + error.message + ' [brittle] ' + comment)
+    if (error.message === 'Cannot convert a Symbol value to a string') t.comment('unlike loosely => ' + error.message + ' [deep-equal] ' + comment)
     else throw error
   }
 
