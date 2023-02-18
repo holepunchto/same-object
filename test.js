@@ -218,6 +218,24 @@ test('Sets', function (t) {
     new Set([new Set([4, 3]), new Set([2, 1])]),
     'Set of Sets, all in different keys'
   )
+
+  unlikeLoosely(t,
+    new Set([{ a: 1 }, 1]),
+    new Set([{ a: 1 }, 2]),
+    'non primitive first, and non alike primitive later'
+  )
+
+  alikeLoosely(t,
+    new Set([{ a: 1 }, Infinity]),
+    new Set([{ a: 1 }, Infinity]),
+    'primitive that is not loose'
+  )
+
+  unlikeLoosely(t,
+    new Set([Symbol.for('hi')]),
+    new Set([Symbol.for('hi2')]),
+    'different symbols in a Set'
+  )
 })
 
 test('Set and Map', function (t) {
@@ -701,10 +719,11 @@ test('regexes vs dates', function (t) {
   t.end()
 })
 
-test('regexen', function (t) {
+test('regexp', function (t) {
   unlikeLoosely(t, /abc/, /xyz/, 'two different regexes', false, false)
   alike(t, /abc/, /abc/, 'two abc regexes', true, true, false)
   alike(t, /xyz/, /xyz/, 'two xyz regexes', true, true, false)
+  unlike(t, /abc/i, /def/g, 'two xyz regexes')
 
   // +
   /* t.test('fake RegExp', function (st) {
