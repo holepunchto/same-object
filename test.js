@@ -461,6 +461,25 @@ test('buffers', { skip: typeof Buffer !== 'function' }, function (t) {
   t.end()
 })
 
+test('DataView', function (t) {
+  const view1 = new DataView(new ArrayBuffer(10))
+  const view2 = new DataView(new ArrayBuffer(10))
+
+  alike(t,
+    view1,
+    view2,
+    'two equals DataViews'
+  )
+
+  view1[3] = 7
+
+  unlike(t,
+    view1,
+    view2,
+    'two equals DataViews'
+  )
+})
+
 test('Arrays', function (t) {
   const a = []
   const b = []
@@ -1157,6 +1176,46 @@ test('TypedArrays', function (t) {
   t.end()
 })
 
+test('String object', function (t) {
+  alike(t,
+    new String('hi'), // eslint-disable-line no-new-wrappers
+    new String('hi'), // eslint-disable-line no-new-wrappers
+    'two same String objects'
+  )
+
+  unlike(t,
+    new String('hi'), // eslint-disable-line no-new-wrappers
+    new String('hi2'), // eslint-disable-line no-new-wrappers
+    'two different String objects'
+  )
+})
+
+test('Number object', function (t) {
+  alike(t,
+    new Number(1), // eslint-disable-line no-new-wrappers
+    new Number(1), // eslint-disable-line no-new-wrappers
+    'two same Number objects'
+  )
+
+  t.absent(sameObject(
+    new Number(1), // eslint-disable-line no-new-wrappers
+    new Number(2) // eslint-disable-line no-new-wrappers
+  ), 'two different Number objects')
+})
+
+test('Boolean object', function (t) {
+  alike(t,
+    new Boolean(true), // eslint-disable-line no-new-wrappers
+    new Boolean(true), // eslint-disable-line no-new-wrappers
+    'two same Boolean objects'
+  )
+
+  t.absent(sameObject(
+    new Boolean(true), // eslint-disable-line no-new-wrappers
+    new Boolean(false) // eslint-disable-line no-new-wrappers
+  ), 'two different Boolean objects')
+})
+
 test('objects', function (t) {
   t.is(sameObject({ foo: 1 }, { foo: 1 }), true)
   t.is(sameObject({ foo: 1 }, { foo: 1, bar: true }), false)
@@ -1194,14 +1253,49 @@ test.skip('symbol as key', function (t) {
   unlike(t, { a: true, [Symbol.for('aa')]: true }, { a: true, [Symbol.for('cc')]: true })
 })
 
-test.skip('promises', function (t) {
-  const resolved = Promise.resolve('hi')
-  const resolved2 = Promise.resolve('hi')
-  alike(t, resolved, resolved2, 'Promise')
+test('promises', function (t) {
+  const promise = new Promise(noop)
+  alike(t, promise, promise, 'two promises with same reference')
 
-  const resolved3 = Promise.resolve('hi')
-  const resolved4 = Promise.resolve('ha')
-  unlike(t, resolved3, resolved4)
+  // +
+  /* alike(t,
+    new Promise(noop),
+    new Promise(noop),
+    'two promises'
+  )
+
+  alike(t,
+    Promise.resolve('hi'),
+    Promise.resolve('hi'),
+    'resolve with same primitive'
+  )
+
+  unlike(t,
+    Promise.resolve('hi1'),
+    Promise.resolve('hi2'),
+    'resolve with different primitive'
+  )
+
+  alike(t,
+    Promise.resolve({ a: 1 }),
+    Promise.resolve({ a: 1 }),
+    'resolve with same objects'
+  )
+
+  unlike(t,
+    Promise.resolve({ a: 1 }),
+    Promise.resolve({ a: 2 }),
+    'resolve with different objects'
+  ) */
+
+  function noop (resolve, reject) {}
+})
+
+test('functions', function (t) {
+  unlike(t, function () {}, function () {}, 'two different functions', true, true)
+
+  const fn = function () {}
+  alike(t, fn, fn, 'two same functions', true, true)
 })
 
 // + merge this case with the other one

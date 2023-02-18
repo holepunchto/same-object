@@ -89,9 +89,7 @@ function same (a, b, opts, memos) {
   return equals
 }
 
-function sameObject (a, b, opts, memos, aType = null) {
-  if (aType === null) aType = getType(a) // It would assume same types for simplicity
-
+function sameObject (a, b, opts, memos, aType) {
   if (aType === 'Array' || aType === 'Arguments') {
     if (!sameArray(a, b, opts, memos)) return false
   }
