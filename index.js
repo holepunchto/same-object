@@ -1,7 +1,6 @@
 module.exports = same
 
 const isPrimitive = require('./lib/is-primitive.js')
-const getType = require('./lib/get-type.js')
 const sameKeys = require('./lib/same-keys.js')
 const sameKeyValues = require('./lib/same-key-values.js')
 const sameIterable = require('./lib/same-iterable.js')
@@ -11,12 +10,6 @@ const sameArray = require('./lib/same-array.js')
 const sameRegExp = require('./lib/same-regexp.js')
 
 function same (a, b, opts, memos) {
-  // Short path optimization
-  /* if (a === b) {
-    if (a !== 0) return true
-    return opts && opts.strict ? Object.is(a, b) : true
-  } */
-
   const aIsPrimitive = isPrimitive(a)
   const bIsPrimitive = isPrimitive(b)
 
@@ -116,4 +109,9 @@ function sameObject (a, b, opts, memos, aType = null) {
   if (!sameKeyValues(a, b, opts, memos)) return false
 
   return true
+}
+
+function getType (o) {
+  // Note: it returns 'Null' for null prototypes
+  return Object.prototype.toString.call(o).slice(8, -1)
 }
