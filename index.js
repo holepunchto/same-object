@@ -17,11 +17,9 @@ function same (a, b, opts, memos) {
 
   if (aIsPrimitive && bIsPrimitive) {
     if (opts && opts.strict) {
-      if (typeof a === 'number' && Number.isNaN(a) && Number.isNaN(b)) return true
-      if (a === 0) return Object.is(a, b)
+      return typeof a === 'number' ? Object.is(a, b) : a === b
     }
-
-    return opts && opts.strict ? a === b : a == b // eslint-disable-line eqeqeq
+    return a == b // eslint-disable-line eqeqeq
   }
 
   const aType = getType(a)
