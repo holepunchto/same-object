@@ -3,6 +3,12 @@ module.exports = function (a, b, opts) {
 }
 
 function same (a, b, opts, memos) {
+  // Short path optimization
+  /* if (a === b) {
+    if (a !== 0) return true
+    return opts && opts.strict ? Object.is(a, b) : true
+  } */
+
   const aIsPrimitive = isPrimitive(a)
   const bIsPrimitive = isPrimitive(b)
 
@@ -267,7 +273,7 @@ function sameMap (a, b, opts, memos) {
 
   if (set.size > 0) {
     for (const [key, item] of b) {
-      if (typeof key === 'object' && key !== null) {
+      if (!isPrimitive(key)) {
         if (!mapHasEqualEntry(set, a, key, item, opts, memos)) {
           return false
         }
