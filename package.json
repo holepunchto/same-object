@@ -4,7 +4,7 @@
   "description": "Determine if two objects are deeply equal",
   "main": "index.js",
   "scripts": {
-    "test": "standard && brittle test.js"
+    "test": "standard && brittle test.js --coverage"
   },
   "repository": {
     "type": "git",
