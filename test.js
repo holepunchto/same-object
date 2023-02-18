@@ -6,13 +6,8 @@ test.configure({ bail: true })
 
 // NOTE: most tests were copied and adapted from deep-equal library
 
-// const assign = require('object.assign')
-// const gOPDs = require('object.getownpropertydescriptors')
-
 const safeBuffer = typeof Buffer === 'function' ? Buffer.from : null
-// const buffersAreTypedArrays = typeof Buffer === 'function' && safeBuffer('') instanceof Uint8Array
-
-const hasDunderProto = [].__proto__ === Array.prototype // eslint-disable-line no-proto
+const buffersAreTypedArrays = typeof Buffer === 'function' && safeBuffer('') instanceof Uint8Array
 
 test('basic', function (t) {
   t.ok(sameObject(1, '1'))
@@ -142,7 +137,8 @@ test('Maps', function (t) {
   )
 })
 
-test.skip('WeakMaps', function (t) {
+// +
+test('WeakMaps', function (t) {
   alike(t,
     new WeakMap([[Object, null], [Function, true]]),
     new WeakMap([[Function, true], [Object, null]]),
@@ -231,6 +227,7 @@ test('Set and Map', function (t) {
     'Map and Set'
   )
 
+  // +
   /* const maplikeSet = new Set()
   Object.defineProperty(maplikeSet, 'constructor', { enumerable: false, value: Map })
   maplikeSet.__proto__ = Map.prototype // eslint-disable-line no-proto
@@ -241,7 +238,8 @@ test('Set and Map', function (t) {
   ) */
 })
 
-test.skip('WeakSets', function (t) {
+// +
+test('WeakSets', function (t) {
   alike(t,
     new WeakSet([Object, Function]),
     new WeakSet([Function, Object]),
@@ -310,14 +308,13 @@ test('arguments class', function (t) {
     'array and arguments with same contents'
   )
 
-  // +
-  /* const args = getArgs()
+  const args = getArgs()
   const notArgs = tag({ length: 0 }, 'Arguments')
   unlikeLoosely(t,
     args,
     notArgs,
     'args and similar arraylike object'
-  ) */
+  )
 })
 
 test('Dates', function (t) {
@@ -328,10 +325,9 @@ test('Dates', function (t) {
 
   d1.a = true
 
-  // +
-  // unlikeLoosely(t, d0, d1, 'two Dates with the same timestamp but different own properties', false, false)
+  unlikeLoosely(t, d0, d1, 'two Dates with the same timestamp but different own properties', false, false)
 
-  t.test('overriding `getTime`', { skip: !Object.defineProperty }, function (st) {
+  t.test('overriding `getTime`', function (st) {
     const a = new Date('2000')
     const b = new Date('2000')
     Object.defineProperty(a, 'getTime', { value: function () { return 5 } })
@@ -343,7 +339,7 @@ test('Dates', function (t) {
     const a = new Date(2000)
     const b = tag(Object.create(
       a.__proto__, // eslint-disable-line no-proto
-      gOPDs(a)
+      Object.getOwnPropertyDescriptors(a)
     ), 'Date')
 
     unlikeLoosely(st,
@@ -353,15 +349,14 @@ test('Dates', function (t) {
     )
   }) */
 
-  // +
-  /* const a = new Date('2000')
+  const a = new Date('2000')
   const b = new Date('2000')
   b.foo = true
   unlikeLoosely(t,
     a,
     b,
     'two identical Dates, one with an extra property'
-  ) */
+  )
 
   unlikeLoosely(t,
     new Date('2000'),
@@ -403,8 +398,7 @@ test('buffers', { skip: typeof Buffer !== 'function' }, function (t) {
     'empty buffer and empty array'
   )
 
-  // +
-  /* t.test('bufferlikes', function (st) {
+  t.test('bufferlikes', function (st) {
     const fakeBuffer = {
       0: 'a',
       length: 1,
@@ -423,7 +417,7 @@ test('buffers', { skip: typeof Buffer !== 'function' }, function (t) {
       'real buffer, and mildly fake buffer'
     )
 
-    st.test('bufferlike', { skip: buffersAreTypedArrays ? !hasSymbols || !Symbol.toStringTag : false }, function (s2t) {
+    st.test('bufferlike', function (s2t) {
       const bufferlike = buffersAreTypedArrays ? new Uint8Array() : {}
       Object.defineProperty(bufferlike, 'length', {
         enumerable: false,
@@ -444,12 +438,11 @@ test('buffers', { skip: typeof Buffer !== 'function' }, function (t) {
     })
 
     st.end()
-  }) */
+  })
 
   t.end()
 })
 
-// +
 test('Arrays', function (t) {
   const a = []
   const b = []
@@ -649,7 +642,7 @@ test('zeroes', function (t) {
   t.end()
 })
 
-test('Object.create', { skip: !Object.create }, function (t) {
+test('Object.create', function (t) {
   const a = { a: 'A' }
   const b = Object.create(a)
   b.b = 'B'
@@ -665,7 +658,7 @@ test('Object.create', { skip: !Object.create }, function (t) {
   t.end()
 })
 
-test('Object.create(null)', { skip: !Object.create }, function (t) {
+test('Object.create(null)', function (t) {
   alike(t,
     Object.create(null),
     Object.create(null),
@@ -696,11 +689,11 @@ test('regexen', function (t) {
   alike(t, /xyz/, /xyz/, 'two xyz regexes', true, true, false)
 
   // +
-  /* t.test('fake RegExp', { skip: !hasDunderProto }, function (st) {
+  /* t.test('fake RegExp', function (st) {
     const a = /abc/g
     const b = tag(Object.create(
       a.__proto__, // eslint-disable-line no-proto
-      gOPDs(a)
+      Object.getOwnPropertyDescriptors(a)
     ), 'RegExp')
 
     unlikeLoosely(st,a, b, 'regex and fake regex', false, false)
@@ -708,15 +701,14 @@ test('regexen', function (t) {
     st.end()
   }) */
 
-  // +
-  /* const a = /abc/gi
+  const a = /abc/gi
   const b = /abc/gi
   b.foo = true
   unlikeLoosely(t,
     a,
     b,
     'two identical regexes, one with an extra property'
-  ) */
+  )
 
   const c = /abc/g
   const d = /abc/i
@@ -788,11 +780,11 @@ test('Errors', function (t) {
   }) */
 
   // +
-  /* unlikeLoosely(t,
+  unlikeLoosely(t,
     new Error('a'),
-    assign(new Error('a'), { code: 10 }),
+    Object.assign(new Error('a'), { code: 10 }),
     'two otherwise equal errors with different own properties'
-  ) */
+  )
 
   // +
   /* t.test('fake error', { skip: !process.env.ASSERT || !hasDunderProto }, function (st) {
@@ -839,7 +831,7 @@ test('[[Prototypes]]', function (t) {
 
   alikeLoosely(t, {}, instance, 'two identical objects with different [[Prototypes]]', true, false)
 
-  t.test('Dates with different prototypes', { skip: !hasDunderProto }, function (st) {
+  t.test('Dates with different prototypes', function (st) {
     const d1 = new Date(0)
     const d2 = new Date(0)
 
@@ -890,7 +882,7 @@ test('boxed primitives', function (t) {
     st.end()
   })
 
-  t.test('bigint', { skip: typeof BigInt !== 'function' }, function (st) {
+  t.test('bigint', function (st) {
     const hhgtg = BigInt(42)
     unlikeLoosely(st, Object(hhgtg), hhgtg, 'boxed and primitive `BigInt(42)`', false, false)
     st.end()
@@ -911,7 +903,7 @@ test('boxed primitives', function (t) {
   t.end()
 })
 
-test('getters', { skip: !Object.defineProperty }, function (t) {
+test('getters', function (t) {
   const a = {}
   Object.defineProperty(a, 'a', { enumerable: true, get: function () { return 5 } })
   const b = {}
@@ -922,8 +914,7 @@ test('getters', { skip: !Object.defineProperty }, function (t) {
   t.end()
 })
 
-test('fake arrays: extra keys will be tested', { skip: !hasDunderProto }, function (t) {
-  // +
+test('fake arrays: extra keys will be tested', function (t) {
   const a = tag({
     __proto__: Array.prototype,
     0: 1,
@@ -989,7 +980,7 @@ test('TypedArrays', function (t) {
     const a = safeBuffer('test')
     const b = tag(Object.create(
       a.__proto__, // eslint-disable-line no-proto
-      assign(gOPDs(a), {
+      Object.assign(Object.getOwnPropertyDescriptors(a), {
         length: {
           enumerable: false,
           value: 4
@@ -1221,58 +1212,54 @@ test('circular references x2', function (t) {
 
 function alike (t, a, b, comment = '') {
   try {
-    // + NOTE: it should use deep-equal instead of t / t.alike
     t.ok(deepEqual(a, b, { strict: true }), '[deep-equal normal] ' + comment)
-    // t.alike(a, b, '[brittle normal] ' + comment)
-    // t.alike(b, a, '[brittle reversed] ' + comment)
+    t.ok(deepEqual(b, a, { strict: true }), '[deep-equal reversed] ' + comment)
   } catch (error) {
     if (error.message === 'Cannot convert a Symbol value to a string') t.comment('alike => ' + error.message + ' [deep-equal] ' + comment)
     else throw error
   }
 
   t.ok(sameObject(a, b, { strict: true }), '[same-object normal] ' + comment)
-  // t.ok(sameObject(b, a, { strict: true }), '[same-object reversed] ' + comment)
+  t.ok(sameObject(b, a, { strict: true }), '[same-object reversed] ' + comment)
 }
 
 function alikeLoosely (t, a, b, comment = '') { // eslint-disable-line no-unused-vars
   try {
     t.ok(deepEqual(a, b, { strict: false }), '[deep-equal normal] ' + comment)
-    // t.alike.coercively(b, a, '[brittle reversed] ' + comment)
+    t.ok(deepEqual(b, a, { strict: false }), '[deep-equal reversed] ' + comment)
   } catch (error) {
     if (error.message === 'Cannot convert a Symbol value to a string') t.comment('alike loosely => ' + error.message + ' [deep-equal] ' + comment)
     else throw error
   }
 
   t.ok(sameObject(a, b, { strict: false }), '[same-object normal] ' + comment)
-  // t.ok(sameObject(b, a, { strict: false }), '[same-object reversed] ' + comment)
+  t.ok(sameObject(b, a, { strict: false }), '[same-object reversed] ' + comment)
 }
 
 function unlike (t, a, b, comment = '') {
   try {
     t.absent(deepEqual(a, b, { strict: true }), '[deep-equal normal] ' + comment)
-    // t.unlike(a, b, '[brittle normal] ' + comment)
-    // t.unlike(b, a, '[brittle reversed] ' + comment)
+    t.absent(deepEqual(b, a, { strict: true }), '[deep-equal reversed] ' + comment)
   } catch (error) {
     if (error.message === 'Cannot convert a Symbol value to a string') t.comment('unlike => ' + error.message + ' [deep-equal] ' + comment)
     else throw error
   }
 
   t.absent(sameObject(a, b, { strict: true }), '[same-object normal] ' + comment)
-  // t.absent(sameObject(b, a, { strict: true }), '[same-object reversed] ' + comment)
+  t.absent(sameObject(b, a, { strict: true }), '[same-object reversed] ' + comment)
 }
 
 function unlikeLoosely (t, a, b, comment = '') { // eslint-disable-line no-unused-vars
   try {
     t.absent(deepEqual(a, b, { strict: false }), '[deep-equal normal] ' + comment)
-    // t.unlike.coercively(a, b, '[deep-equal normal] ' + comment)
-    // t.unlike.coercively(b, a, '[brittle reversed] ' + comment)
+    t.absent(deepEqual(b, a, { strict: false }), '[deep-equal reversed] ' + comment)
   } catch (error) {
     if (error.message === 'Cannot convert a Symbol value to a string') t.comment('unlike loosely => ' + error.message + ' [deep-equal] ' + comment)
     else throw error
   }
 
   t.absent(sameObject(a, b, { strict: false }), '[same-object normal] ' + comment)
-  // t.absent(sameObject(b, a, { strict: false }), '[same-object reversed] ' + comment)
+  t.absent(sameObject(b, a, { strict: false }), '[same-object reversed] ' + comment)
 }
 
 function tag (obj, value) {
