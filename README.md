@@ -6,7 +6,7 @@ Determine if two objects are deeply equal
 npm install same-object
 ```
 
-Supports circular references, Maps, Symbols, etc. Based on: [chaijs/deep-eql](https://github.com/chaijs/deep-eql)
+Supports circular references, Maps, Symbols, etc.
 
 Aims for ~99% compatibility with `deep-equal` without requiring native dependencies.\
 Useful for JavaScript runtimes without native Node modules like `util`, etc.
@@ -40,6 +40,12 @@ Available `options`:
 
 Loosely comparison (`==`) by default.\
 Use `{ strict: true }` for a stronger equality check (`===`).
+
+## References
+The source code is based on:
+[node/comparisons.js](https://github.com/nodejs/node/blob/2adea16e394448c4c87b0639514f8babbeb7a080/lib/internal/util/comparisons.js)
+[inspect-js/node-deep-equal](https://github.com/inspect-js/node-deep-equal)
+[chaijs/deep-eql](https://github.com/chaijs/deep-eql)
 
 ## License
 MIT
