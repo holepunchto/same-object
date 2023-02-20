@@ -4,7 +4,7 @@
   "description": "Determine if two objects are deeply equal",
   "main": "index.js",
   "scripts": {
-    "test": "standard && brittle test.js"
+    "test": "standard && brittle test.js --coverage"
   },
   "repository": {
     "type": "git",
@@ -18,9 +18,7 @@
   "homepage": "https://github.com/holepunchto/same-object",
   "devDependencies": {
     "brittle": "^3.1.1",
+    "deep-equal": "^2.2.0",
     "standard": "^17.0.0"
-  },
-  "dependencies": {
-    "deep-eql": "^4.1.3"
   }
 }
