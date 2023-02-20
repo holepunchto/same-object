@@ -476,7 +476,7 @@ test('DataView', function (t) {
   unlike(t,
     view1,
     view2,
-    'two equals DataViews'
+    'two inequal DataViews'
   )
 })
 
@@ -1242,9 +1242,9 @@ test('numbers', function (t) {
   alike(t, BigInt('9007199254740991'), BigInt('9007199254740991'), 'BigInt', true, true)
   alike(t, Infinity, Infinity, 'Infinity', true, true)
 
-  // + ?
-  alike(t, NaN, NaN, 'NaN (alike)', true, true)
-  unlikeLoosely(t, NaN, NaN, 'NaN (unlike loosely)', false, false)
+  // Note: deep-equal library fails, but Node's assert version passes, so we follow Node standard
+  t.ok(sameObject(NaN, NaN, { strict: true }), 'NaN (alike)')
+  t.ok(sameObject(NaN, NaN, { strict: false }), 'NaN (alike loosely)')
 })
 
 // +

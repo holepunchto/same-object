@@ -10,16 +10,26 @@ const sameArray = require('./lib/same-array.js')
 const sameRegExp = require('./lib/same-regexp.js')
 
 function same (a, b, opts, memos) {
+  // Short path optimization
+  if (a === b) {
+    if (a !== 0) return true
+    return opts && opts.strict ? Object.is(a, b) : true
+  }
+
   const aIsPrimitive = isPrimitive(a)
   const bIsPrimitive = isPrimitive(b)
 
-  if (aIsPrimitive !== bIsPrimitive) return false
-
   if (aIsPrimitive && bIsPrimitive) {
     if (opts && opts.strict) {
-      return typeof a === 'number' ? Object.is(a, b) : a === b
+      return typeof a === 'number' ? (Number.isNaN(a) && Number.isNaN(b)) : a === b
     }
-    return a == b // eslint-disable-line eqeqeq
+    return a == b || (Number.isNaN(a) && Number.isNaN(b)) // eslint-disable-line eqeqeq
+  }
+
+  if (aIsPrimitive !== bIsPrimitive) return false
+
+  if (opts && opts.strict) {
+    if (Object.getPrototypeOf(a) !== Object.getPrototypeOf(b)) return false
   }
 
   const aType = getType(a)
@@ -35,13 +45,6 @@ function same (a, b, opts, memos) {
     case 'Boolean':
     case 'Date':
       return same(a.valueOf(), b.valueOf(), opts, memos)
-  }
-
-  switch (aType) {
-    case 'Promise':
-    case 'Symbol':
-    case 'function':
-      return a === b
   }
 
   if (aType === 'Error') {
