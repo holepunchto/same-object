@@ -8,7 +8,7 @@ npm install same-object
 
 Supports circular references, Maps, Symbols, etc.
 
-Aims for ~99% compatibility with `deep-equal` without requiring native dependencies.\
+Aims for ~99% compatibility with `deep-equal` or `assert.deepEqual` without requiring native dependencies.\
 Useful for JavaScript runtimes without native Node modules like `util`, etc.
 
 ## Usage
