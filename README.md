@@ -15,14 +15,16 @@ Useful for JavaScript runtimes without native Node modules like `util`, etc.
 ``` js
 const sameObject = require('same-object')
 
-console.log(sameObject(1, 1)) // true
-console.log(sameObject(1, 2)) // false
-
 console.log(sameObject(1, '1')) // true
 console.log(sameObject(1, '1', { strict: true })) // false
 
-console.log(sameObject({ foo: 1 }, { foo: 1 })) // true
-console.log(sameObject({ foo: 1 }, { foo: 1, bar: true })) // false
+console.log(sameObject({ a: 1 }, { a: 1 })) // true
+console.log(sameObject({ a: 1 }, { a: 1, b: 2 })) // false
+
+console.log(sameObject(
+  new Set(['a', 1, 'b', 2]),
+  new Set(['b', 2, 'a', 1])
+)) // true
 ```
 
 ## API
