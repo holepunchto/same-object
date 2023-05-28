@@ -50,4 +50,4 @@ The source code is based on:\
 [chaijs/deep-eql](https://github.com/chaijs/deep-eql)
 
 ## License
-MIT
+Apache-2.0
