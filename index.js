@@ -9,7 +9,7 @@ const sameMap = require('./lib/same-map.js')
 const sameArray = require('./lib/same-array.js')
 const sameRegExp = require('./lib/same-regexp.js')
 
-function same (a, b, opts, memos) {
+function same(a, b, opts, memos) {
   // Short path optimization
   if (a === b) {
     if (a !== 0) return true
@@ -21,7 +21,9 @@ function same (a, b, opts, memos) {
 
   if (aIsPrimitive && bIsPrimitive) {
     if (opts && opts.strict) {
-      return typeof a === 'number' ? (Number.isNaN(a) && Number.isNaN(b)) : a === b
+      return typeof a === 'number'
+        ? Number.isNaN(a) && Number.isNaN(b)
+        : a === b
     }
     return a == b || (Number.isNaN(a) && Number.isNaN(b)) // eslint-disable-line eqeqeq
   }
@@ -63,7 +65,12 @@ function same (a, b, opts, memos) {
     case 'Float64Array':
       return sameIterable(a, b, opts, memos)
     case 'DataView':
-      return sameIterable(new Uint8Array(a.buffer, a.byteOffset, a.byteLength), new Uint8Array(b.buffer, b.byteOffset, b.byteLength), opts, memos)
+      return sameIterable(
+        new Uint8Array(a.buffer, a.byteOffset, a.byteLength),
+        new Uint8Array(b.buffer, b.byteOffset, b.byteLength),
+        opts,
+        memos
+      )
     case 'ArrayBuffer':
       return sameIterable(new Uint8Array(a), new Uint8Array(b), opts, memos)
   }
@@ -92,7 +99,7 @@ function same (a, b, opts, memos) {
   return equals
 }
 
-function sameObject (a, b, opts, memos, aType) {
+function sameObject(a, b, opts, memos, aType) {
   if (aType === 'Array' || aType === 'Arguments') {
     if (!sameArray(a, b, opts, memos)) return false
   }
@@ -110,7 +117,7 @@ function sameObject (a, b, opts, memos, aType) {
   return true
 }
 
-function getType (o) {
+function getType(o) {
   // Note: it returns 'Null' for null prototypes
   return Object.prototype.toString.call(o).slice(8, -1)
 }
