@@ -21,9 +21,7 @@ function same(a, b, opts, memos) {
 
   if (aIsPrimitive && bIsPrimitive) {
     if (opts && opts.strict) {
-      return typeof a === 'number'
-        ? Number.isNaN(a) && Number.isNaN(b)
-        : a === b
+      return typeof a === 'number' ? Number.isNaN(a) && Number.isNaN(b) : a === b
     }
     return a == b || (Number.isNaN(a) && Number.isNaN(b)) // eslint-disable-line eqeqeq
   }
