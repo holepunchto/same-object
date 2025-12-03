@@ -1316,9 +1316,11 @@ function alike(t, a, b, comment = '') {
     t.ok(deepEqual(a, b, { strict: true }), '[deep-equal normal] ' + comment)
     t.ok(deepEqual(b, a, { strict: true }), '[deep-equal reversed] ' + comment)
   } catch (error) {
-    if (error.message === 'Cannot convert a Symbol value to a string')
+    if (error.message === 'Cannot convert a Symbol value to a string') {
       t.comment('alike => ' + error.message + ' [deep-equal] ' + comment)
-    else throw error
+    } else {
+      throw error
+    }
   }
 
   t.ok(sameObject(a, b, { strict: true }), '[same-object normal] ' + comment)
@@ -1331,9 +1333,11 @@ function alikeLoosely(t, a, b, comment = '') {
     t.ok(deepEqual(a, b, { strict: false }), '[deep-equal normal] ' + comment)
     t.ok(deepEqual(b, a, { strict: false }), '[deep-equal reversed] ' + comment)
   } catch (error) {
-    if (error.message === 'Cannot convert a Symbol value to a string')
+    if (error.message === 'Cannot convert a Symbol value to a string') {
       t.comment('alike loosely => ' + error.message + ' [deep-equal] ' + comment)
-    else throw error
+    } else {
+      throw error
+    }
   }
 
   t.ok(sameObject(a, b, { strict: false }), '[same-object normal] ' + comment)
@@ -1345,9 +1349,11 @@ function unlike(t, a, b, comment = '') {
     t.absent(deepEqual(a, b, { strict: true }), '[deep-equal normal] ' + comment)
     t.absent(deepEqual(b, a, { strict: true }), '[deep-equal reversed] ' + comment)
   } catch (error) {
-    if (error.message === 'Cannot convert a Symbol value to a string')
+    if (error.message === 'Cannot convert a Symbol value to a string') {
       t.comment('unlike => ' + error.message + ' [deep-equal] ' + comment)
-    else throw error
+    } else {
+      throw error
+    }
   }
 
   t.absent(sameObject(a, b, { strict: true }), '[same-object normal] ' + comment)
@@ -1360,9 +1366,11 @@ function unlikeLoosely(t, a, b, comment = '') {
     t.absent(deepEqual(a, b, { strict: false }), '[deep-equal normal] ' + comment)
     t.absent(deepEqual(b, a, { strict: false }), '[deep-equal reversed] ' + comment)
   } catch (error) {
-    if (error.message === 'Cannot convert a Symbol value to a string')
+    if (error.message === 'Cannot convert a Symbol value to a string') {
       t.comment('unlike loosely => ' + error.message + ' [deep-equal] ' + comment)
-    else throw error
+    } else {
+      throw error
+    }
   }
 
   t.absent(sameObject(a, b, { strict: false }), '[same-object normal] ' + comment)

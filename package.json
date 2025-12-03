@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "format": "prettier --write .",
-    "lint": "prettier --check .",
-    "test": "npm run lint && brittle test.js --coverage"
+    "lint": "prettier --check . && lunte",
+    "test": "brittle-node test.js --coverage"
   },
   "repository": {
     "type": "git",
@@ -19,8 +19,10 @@
   },
   "homepage": "https://github.com/holepunchto/same-object",
   "devDependencies": {
+    "bare-utils": "^1.0.0",
     "brittle": "^3.1.1",
     "deep-equal": "^2.2.0",
+    "lunte": "^1.0.0",
     "prettier": "^3.6.2",
     "prettier-config-holepunch": "^2.0.0"
   }
