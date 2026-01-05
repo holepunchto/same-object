@@ -20,218 +20,275 @@ test('basic helper', function (t) {
 })
 
 test('equal', function (t) {
-  alike(t,
-    { a: [2, 3], b: [4] },
-    { a: [2, 3], b: [4] },
-    'two equal objects'
-  )
+  alike(t, { a: [2, 3], b: [4] }, { a: [2, 3], b: [4] }, 'two equal objects')
 
-  alikeLoosely(t,
-    { a: 2, b: '4' },
-    { a: 2, b: 4 },
-    'two loosely equal, strictly inequal objects'
-  )
+  alikeLoosely(t, { a: 2, b: '4' }, { a: 2, b: 4 }, 'two loosely equal, strictly inequal objects')
 
-  unlikeLoosely(t,
-    { a: 2, b: 4 },
-    { a: 2, B: 4 },
-    'two inequal objects'
-  )
+  unlikeLoosely(t, { a: 2, b: 4 }, { a: 2, B: 4 }, 'two inequal objects')
 
-  alikeLoosely(t,
-    '-000',
-    false,
-    '`false` and `"-000"`'
-  )
+  alikeLoosely(t, '-000', false, '`false` and `"-000"`')
 })
 
 test('Maps', function (t) {
-  alike(t,
-    new Map([['a', 1], ['b', 2]]),
-    new Map([['b', 2], ['a', 1]]),
+  alike(
+    t,
+    new Map([
+      ['a', 1],
+      ['b', 2]
+    ]),
+    new Map([
+      ['b', 2],
+      ['a', 1]
+    ]),
     'two equal Maps'
   )
 
-  unlikeLoosely(t,
+  unlikeLoosely(
+    t,
     new Map([['a', [1, 2]]]),
     new Map([['a', [2, 1]]]),
     'two Maps with inequal values on the same key'
   )
 
-  unlikeLoosely(t,
-    new Map([['a', 1]]),
-    new Map([['b', 1]]),
-    'two inequal Maps'
-  )
+  unlikeLoosely(t, new Map([['a', 1]]), new Map([['b', 1]]), 'two inequal Maps')
 
-  alike(t,
-    new Map([[{}, 3], [{}, 2], [{}, 1]]),
-    new Map([[{}, 1], [{}, 2], [{}, 3]]),
+  alike(
+    t,
+    new Map([
+      [{}, 3],
+      [{}, 2],
+      [{}, 1]
+    ]),
+    new Map([
+      [{}, 1],
+      [{}, 2],
+      [{}, 3]
+    ]),
     'two equal Maps in different orders with object keys'
   )
 
-  alikeLoosely(t,
+  alikeLoosely(
+    t,
     new Map([[undefined, undefined]]),
     new Map([[undefined, null]]),
     'undefined keys, nullish values, loosely equal, strictly inequal'
   )
 
-  alike(t,
-    new Map([[{}, null], [true, 2], [{}, 1], [undefined, {}]]),
-    new Map([[{}, 1], [true, 2], [{}, null], [undefined, {}]]),
+  alike(
+    t,
+    new Map([
+      [{}, null],
+      [true, 2],
+      [{}, 1],
+      [undefined, {}]
+    ]),
+    new Map([
+      [{}, 1],
+      [true, 2],
+      [{}, null],
+      [undefined, {}]
+    ]),
     'two equal Maps in different orders with primitive keys'
   )
 
-  alike(t,
-    new Map([[false, 3], [{}, 2], [{}, 1]]),
-    new Map([[{}, 1], [{}, 2], [false, 3]]),
+  alike(
+    t,
+    new Map([
+      [false, 3],
+      [{}, 2],
+      [{}, 1]
+    ]),
+    new Map([
+      [{}, 1],
+      [{}, 2],
+      [false, 3]
+    ]),
     'two equal Maps in different orders with a mix of keys'
   )
 
-  alikeLoosely(t,
+  alikeLoosely(
+    t,
     new Map([[null, undefined]]),
     new Map([[null, null]]),
     'null keys, nullish values, loosely equal, strictly inequal'
   )
 
-  alikeLoosely(t,
+  alikeLoosely(
+    t,
     new Map([[undefined, 3]]),
     new Map([[null, 3]]),
     'nullish keys, loosely equal, strictly inequal'
   )
 
-  alike(t,
-    new Map([[{}, null], [true, 2], [{}, 1], [undefined, {}]]),
-    new Map([[{}, 1], [true, 2], [{}, null], [undefined, {}]]),
+  alike(
+    t,
+    new Map([
+      [{}, null],
+      [true, 2],
+      [{}, 1],
+      [undefined, {}]
+    ]),
+    new Map([
+      [{}, 1],
+      [true, 2],
+      [{}, null],
+      [undefined, {}]
+    ]),
     'two equal Maps in different orders with primitive keys'
   )
 
-  alike(t,
-    new Map([[false, 3], [{}, 2], [{}, 1]]),
-    new Map([[{}, 1], [{}, 2], [false, 3]]),
+  alike(
+    t,
+    new Map([
+      [false, 3],
+      [{}, 2],
+      [{}, 1]
+    ]),
+    new Map([
+      [{}, 1],
+      [{}, 2],
+      [false, 3]
+    ]),
     'two equal Maps in different orders with a mix of keys'
   )
 
-  unlikeLoosely(t,
-    new Map(),
-    new Map([[{}, 1]]),
-    'two inequal Maps'
-  )
+  unlikeLoosely(t, new Map(), new Map([[{}, 1]]), 'two inequal Maps')
 
-  unlikeLoosely(t,
-    new Map([[{}, null], [false, 3]]),
-    new Map([[{}, null], [true, 2]]),
+  unlikeLoosely(
+    t,
+    new Map([
+      [{}, null],
+      [false, 3]
+    ]),
+    new Map([
+      [{}, null],
+      [true, 2]
+    ]),
     'two inequal maps, same size, primitive key, start with object key'
   )
 
-  unlikeLoosely(t,
-    new Map([[false, 3], [{}, null]]),
-    new Map([[true, 2], [{}, null]]),
+  unlikeLoosely(
+    t,
+    new Map([
+      [false, 3],
+      [{}, null]
+    ]),
+    new Map([
+      [true, 2],
+      [{}, null]
+    ]),
     'two inequal maps, same size, primitive key, start with primitive key'
   )
 
-  alikeLoosely(t,
-    new Map([[undefined, null], ['+000', 2]]),
-    new Map([[null, undefined], [false, '2']]),
+  alikeLoosely(
+    t,
+    new Map([
+      [undefined, null],
+      ['+000', 2]
+    ]),
+    new Map([
+      [null, undefined],
+      [false, '2']
+    ]),
     'primitive comparisons'
   )
 })
 
 // +
 test('WeakMaps', function (t) {
-  alike(t,
-    new WeakMap([[Object, null], [Function, true]]),
-    new WeakMap([[Function, true], [Object, null]]),
+  alike(
+    t,
+    new WeakMap([
+      [Object, null],
+      [Function, true]
+    ]),
+    new WeakMap([
+      [Function, true],
+      [Object, null]
+    ]),
     'two equal WeakMaps'
   )
 
-  alike(t,
+  alike(
+    t,
     new WeakMap([[Object, null]]),
     new WeakMap([[Object, true]]),
     'two WeakMaps with inequal values on the same key'
   )
 
-  alike(t,
-    new WeakMap([[Object, null], [Function, true]]),
+  alike(
+    t,
+    new WeakMap([
+      [Object, null],
+      [Function, true]
+    ]),
     new WeakMap([[Object, null]]),
     'two inequal WeakMaps'
   )
 })
 
 test('Sets', function (t) {
-  alike(t,
-    new Set(['a', 1, 'b', 2]),
-    new Set(['b', 2, 'a', 1]),
-    'two equal Sets'
-  )
+  alike(t, new Set(['a', 1, 'b', 2]), new Set(['b', 2, 'a', 1]), 'two equal Sets')
 
-  unlikeLoosely(t,
-    new Set(['a', 1]),
-    new Set(['b', 1]),
-    'two inequal Sets'
-  )
+  unlikeLoosely(t, new Set(['a', 1]), new Set(['b', 1]), 'two inequal Sets')
 
-  alike(t,
+  alike(
+    t,
     new Set([{}, 1, {}, {}, 2]),
     new Set([{}, 1, {}, 2, {}]),
     'two equal Sets in different orders'
   )
 
-  unlikeLoosely(t,
-    new Set(),
-    new Set([1]),
-    'two inequally sized Sets'
-  )
+  unlikeLoosely(t, new Set(), new Set([1]), 'two inequally sized Sets')
 
-  alikeLoosely(t,
+  alikeLoosely(
+    t,
     new Set([{ a: 1 }, 2]),
     new Set(['2', { a: '1' }]),
     'two loosely equal, strictly inequal Sets'
   )
 
-  unlikeLoosely(t,
-    new Set([{ a: 1 }, 2]),
-    new Set(['2', { a: 2 }]),
-    'two inequal Sets'
-  )
+  unlikeLoosely(t, new Set([{ a: 1 }, 2]), new Set(['2', { a: 2 }]), 'two inequal Sets')
 
-  alikeLoosely(t,
+  alikeLoosely(
+    t,
     new Set([null, '', 1, 5, 2, false]),
     new Set([undefined, 0, '5', true, '2', '-000']),
     'more primitive comparisons'
   )
 
-  alike(t,
-    new Set([1, 2]),
-    new Set([2, 1]),
-    'primitives in different keys'
-  )
+  alike(t, new Set([1, 2]), new Set([2, 1]), 'primitives in different keys')
 
-  alike(t,
+  alike(
+    t,
     new Set([{ a: 1 }, { b: 2 }]),
     new Set([{ b: 2 }, { a: 1 }]),
     'object values in different keys'
   )
 
-  alike(t,
+  alike(
+    t,
     new Set([new Set([1, 2]), new Set([3, 4])]),
     new Set([new Set([4, 3]), new Set([2, 1])]),
     'Set of Sets, all in different keys'
   )
 
-  unlikeLoosely(t,
+  unlikeLoosely(
+    t,
     new Set([{ a: 1 }, 1]),
     new Set([{ a: 1 }, 2]),
     'non primitive first, and non alike primitive later'
   )
 
-  alikeLoosely(t,
+  alikeLoosely(
+    t,
     new Set([{ a: 1 }, Infinity]),
     new Set([{ a: 1 }, Infinity]),
     'primitive that is not loose'
   )
 
-  unlikeLoosely(t,
+  unlikeLoosely(
+    t,
     new Set([Symbol.for('hi')]),
     new Set([Symbol.for('hi2')]),
     'different symbols in a Set'
@@ -239,11 +296,7 @@ test('Sets', function (t) {
 })
 
 test('Set and Map', function (t) {
-  unlikeLoosely(t,
-    new Set(),
-    new Map(),
-    'Map and Set'
-  )
+  unlikeLoosely(t, new Set(), new Map(), 'Map and Set')
 
   // +
   /* const maplikeSet = new Set()
@@ -258,37 +311,22 @@ test('Set and Map', function (t) {
 
 // +
 test('WeakSets', function (t) {
-  alike(t,
-    new WeakSet([Object, Function]),
-    new WeakSet([Function, Object]),
-    'two equal WeakSets'
-  )
+  alike(t, new WeakSet([Object, Function]), new WeakSet([Function, Object]), 'two equal WeakSets')
 
-  alike(t,
-    new WeakSet([Object, Function]),
-    new WeakSet([Object]),
-    'two inequal WeakSets'
-  )
+  alike(t, new WeakSet([Object, Function]), new WeakSet([Object]), 'two inequal WeakSets')
 })
 
 test('not equal', function (t) {
-  unlikeLoosely(t,
-    { x: 5, y: [6] },
-    { x: 5, y: 6 },
-    'two inequal objects are'
-  )
+  unlikeLoosely(t, { x: 5, y: [6] }, { x: 5, y: 6 }, 'two inequal objects are')
 })
 
 test('nested nulls', function (t) {
-  alike(t,
-    [null, null, null],
-    [null, null, null],
-    'same-length arrays of nulls'
-  )
+  alike(t, [null, null, null], [null, null, null], 'same-length arrays of nulls')
 })
 
 test('objects with strings vs numbers', function (t) {
-  alikeLoosely(t,
+  alikeLoosely(
+    t,
     [{ a: 3 }, { b: 4 }],
     [{ a: '3' }, { b: '4' }],
     'objects with equivalent string/number values'
@@ -310,29 +348,17 @@ test('infinities', function (t) {
 })
 
 test('arguments class', function (t) {
-  function getArgs () {
+  function getArgs() {
     return arguments
   }
 
-  alike(t,
-    getArgs(1, 2, 3),
-    getArgs(1, 2, 3),
-    'equivalent arguments objects are equal'
-  )
+  alike(t, getArgs(1, 2, 3), getArgs(1, 2, 3), 'equivalent arguments objects are equal')
 
-  unlikeLoosely(t,
-    getArgs(1, 2, 3),
-    [1, 2, 3],
-    'array and arguments with same contents'
-  )
+  unlikeLoosely(t, getArgs(1, 2, 3), [1, 2, 3], 'array and arguments with same contents')
 
   const args = getArgs()
   const notArgs = tag({ length: 0 }, 'Arguments')
-  unlikeLoosely(t,
-    args,
-    notArgs,
-    'args and similar arraylike object'
-  )
+  unlikeLoosely(t, args, notArgs, 'args and similar arraylike object')
 })
 
 test('Dates', function (t) {
@@ -343,13 +369,31 @@ test('Dates', function (t) {
 
   d1.a = true
 
-  unlikeLoosely(t, d0, d1, 'two Dates with the same timestamp but different own properties', false, false)
+  unlikeLoosely(
+    t,
+    d0,
+    d1,
+    'two Dates with the same timestamp but different own properties',
+    false,
+    false
+  )
 
   t.test('overriding `getTime`', function (st) {
     const a = new Date('2000')
     const b = new Date('2000')
-    Object.defineProperty(a, 'getTime', { value: function () { return 5 } })
-    alike(st, a, b, 'two Dates with the same timestamp but one has overridden `getTime`', true, true)
+    Object.defineProperty(a, 'getTime', {
+      value: function () {
+        return 5
+      }
+    })
+    alike(
+      st,
+      a,
+      b,
+      'two Dates with the same timestamp but one has overridden `getTime`',
+      true,
+      true
+    )
   })
 
   // +
@@ -370,51 +414,28 @@ test('Dates', function (t) {
   const a = new Date('2000')
   const b = new Date('2000')
   b.foo = true
-  unlikeLoosely(t,
-    a,
-    b,
-    'two identical Dates, one with an extra property'
-  )
+  unlikeLoosely(t, a, b, 'two identical Dates, one with an extra property')
 
-  unlikeLoosely(t,
-    new Date('2000'),
-    new Date('2001'),
-    'two inequal Dates'
-  )
+  unlikeLoosely(t, new Date('2000'), new Date('2001'), 'two inequal Dates')
 })
 
 test('buffers', { skip: typeof Buffer !== 'function' }, function (t) {
-  alike(t,
-    safeBuffer('xyz'),
-    safeBuffer('xyz'),
-    'buffers with same contents are equal'
-  )
+  alike(t, safeBuffer('xyz'), safeBuffer('xyz'), 'buffers with same contents are equal')
 
-  unlikeLoosely(t,
+  unlikeLoosely(
+    t,
     safeBuffer('xyz'),
     safeBuffer('xyy'),
     'buffers with same length and different contents are inequal'
   )
 
-  unlikeLoosely(t,
-    safeBuffer('xyz'),
-    safeBuffer('xy'),
-    'buffers with different length are inequal'
-  )
+  unlikeLoosely(t, safeBuffer('xyz'), safeBuffer('xy'), 'buffers with different length are inequal')
 
-  unlikeLoosely(t,
-    safeBuffer('abc'),
-    safeBuffer('xyz'),
-    'buffers with different contents'
-  )
+  unlikeLoosely(t, safeBuffer('abc'), safeBuffer('xyz'), 'buffers with different contents')
 
   const emptyBuffer = safeBuffer('')
 
-  unlikeLoosely(t,
-    emptyBuffer,
-    [],
-    'empty buffer and empty array'
-  )
+  unlikeLoosely(t, emptyBuffer, [], 'empty buffer and empty array')
 
   t.test('bufferlikes', function (st) {
     const fakeBuffer = {
@@ -429,11 +450,7 @@ test('buffers', { skip: typeof Buffer !== 'function' }, function (t) {
     Object.defineProperty(fakeBuffer, 'copy', { enumerable: false })
     Object.defineProperty(fakeBuffer, 'slice', { enumerable: false })
 
-    unlikeLoosely(st,
-      safeBuffer('a'),
-      fakeBuffer,
-      'real buffer, and mildly fake buffer'
-    )
+    unlikeLoosely(st, safeBuffer('a'), fakeBuffer, 'real buffer, and mildly fake buffer')
 
     st.test('bufferlike', function (s2t) {
       const bufferlike = buffersAreTypedArrays ? new Uint8Array() : {}
@@ -447,11 +464,7 @@ test('buffers', { skip: typeof Buffer !== 'function' }, function (t) {
       })
       bufferlike.__proto__ = emptyBuffer.__proto__ // eslint-disable-line no-proto
 
-      alike(s2t,
-        emptyBuffer,
-        bufferlike,
-        'empty buffer and empty bufferlike'
-      )
+      alike(s2t, emptyBuffer, bufferlike, 'empty buffer and empty bufferlike')
       s2t.end()
     })
 
@@ -465,19 +478,11 @@ test('DataView', function (t) {
   const view1 = new DataView(new ArrayBuffer(10))
   const view2 = new DataView(new ArrayBuffer(10))
 
-  alike(t,
-    view1,
-    view2,
-    'two equals DataViews'
-  )
+  alike(t, view1, view2, 'two equals DataViews')
 
   view1[3] = 7
 
-  unlike(t,
-    view1,
-    view2,
-    'two inequal DataViews'
-  )
+  unlike(t, view1, view2, 'two inequal DataViews')
 })
 
 test('Arrays', function (t) {
@@ -485,11 +490,7 @@ test('Arrays', function (t) {
   const b = []
   b.foo = true
 
-  unlikeLoosely(t,
-    a,
-    b,
-    'two identical arrays, one with an extra property'
-  )
+  unlikeLoosely(t, a, b, 'two identical arrays, one with an extra property')
 
   const c = [undefined, 'test']
   const d = []
@@ -516,96 +517,31 @@ test('Arrays', function (t) {
 })
 
 test('booleans', function (t) {
-  alike(t,
-    true,
-    true,
-    'trues'
-  )
+  alike(t, true, true, 'trues')
 
-  alike(t,
-    false,
-    false,
-    'falses'
-  )
+  alike(t, false, false, 'falses')
 
-  unlikeLoosely(t,
-    true,
-    false,
-    'true and false'
-  )
+  unlikeLoosely(t, true, false, 'true and false')
 
   t.end()
 })
 
 test('booleans and arrays', function (t) {
-  unlikeLoosely(t,
-    true,
-    [],
-    'true and an empty array',
-    false,
-    false
-  )
-  unlikeLoosely(t,
-    false,
-    [],
-    'false and an empty array'
-  )
+  unlikeLoosely(t, true, [], 'true and an empty array', false, false)
+  unlikeLoosely(t, false, [], 'false and an empty array')
   t.end()
 })
 
 test('arrays initiated', function (t) {
-  const a0 = [
-    undefined,
-    null,
-    -1,
-    0,
-    1,
-    false,
-    true,
-    undefined,
-    '',
-    'abc',
-    null,
-    undefined
-  ]
-  const a1 = [
-    undefined,
-    null,
-    -1,
-    0,
-    1,
-    false,
-    true,
-    undefined,
-    '',
-    'abc',
-    null,
-    undefined
-  ]
+  const a0 = [undefined, null, -1, 0, 1, false, true, undefined, '', 'abc', null, undefined]
+  const a1 = [undefined, null, -1, 0, 1, false, true, undefined, '', 'abc', null, undefined]
 
-  alike(t,
-    a0,
-    a1,
-    'arrays with equal contents are equal'
-  )
+  alike(t, a0, a1, 'arrays with equal contents are equal')
   t.end()
 })
 
 test('arrays assigned', function (t) {
-  const a0 = [
-    undefined,
-    null,
-    -1,
-    0,
-    1,
-    false,
-    true,
-    undefined,
-    '',
-    'abc',
-    null,
-    undefined
-  ]
+  const a0 = [undefined, null, -1, 0, 1, false, true, undefined, '', 'abc', null, undefined]
   const a1 = []
 
   a1[0] = undefined
@@ -627,20 +563,7 @@ test('arrays assigned', function (t) {
 })
 
 test('arrays push', function (t) {
-  const a0 = [
-    undefined,
-    null,
-    -1,
-    0,
-    1,
-    false,
-    true,
-    undefined,
-    '',
-    'abc',
-    null,
-    undefined
-  ]
+  const a0 = [undefined, null, -1, 0, 1, false, true, undefined, '', 'abc', null, undefined]
   const a1 = []
 
   a1.push(undefined)
@@ -670,17 +593,9 @@ test('null == undefined', function (t) {
 
 // node 14 changed `deepEqual` to make two NaNs loosely equal
 test('NaNs', function (t) {
-  alike(t,
-    NaN,
-    NaN,
-    'two NaNs'
-  )
+  alike(t, NaN, NaN, 'two NaNs')
 
-  alike(t,
-    { a: NaN },
-    { a: NaN },
-    'two equiv objects with a NaN value'
-  )
+  alike(t, { a: NaN }, { a: NaN }, 'two equiv objects with a NaN value')
 
   unlikeLoosely(t, NaN, 1, 'NaN and 1', false, false)
 
@@ -704,23 +619,16 @@ test('Object.create', function (t) {
   const c = Object.create(a)
   c.b = 'C'
 
-  unlikeLoosely(t,
-    b,
-    c,
-    'two objects with the same [[Prototype]] but a different own property'
-  )
+  unlikeLoosely(t, b, c, 'two objects with the same [[Prototype]] but a different own property')
 
   t.end()
 })
 
 test('Object.create(null)', function (t) {
-  alike(t,
-    Object.create(null),
-    Object.create(null),
-    'two empty null objects'
-  )
+  alike(t, Object.create(null), Object.create(null), 'two empty null objects')
 
-  alike(t,
+  alike(
+    t,
     Object.create(null, { a: { value: 'b' } }),
     Object.create(null, { a: { value: 'b' } }),
     'two null objects with the same property pair'
@@ -760,25 +668,18 @@ test('regexp', function (t) {
   const a = /abc/gi
   const b = /abc/gi
   b.foo = true
-  unlikeLoosely(t,
-    a,
-    b,
-    'two identical regexes, one with an extra property'
-  )
+  unlikeLoosely(t, a, b, 'two identical regexes, one with an extra property')
 
   const c = /abc/g
   const d = /abc/i
-  unlikeLoosely(t,
-    c,
-    d,
-    'two regexes with the same source but different flags'
-  )
+  unlikeLoosely(t, c, d, 'two regexes with the same source but different flags')
 
   t.end()
 })
 
 test('object literals', function (t) {
-  alikeLoosely(t,
+  alikeLoosely(
+    t,
     { prototype: 2 },
     { prototype: '2' },
     'two loosely equal, strictly inequal prototype properties'
@@ -796,13 +697,29 @@ test('arrays and objects', function (t) {
 })
 
 test('functions', function (t) {
-  function f () {}
+  function f() {}
 
   alike(t, f, f, 'a function and itself', true, true, true)
   alike(t, [f], [f], 'a function and itself in an array', true, true, true)
 
-  unlikeLoosely(t, function () {}, function () {}, 'two distinct functions', false, false, true)
-  unlikeLoosely(t, [function () {}], [function () {}], 'two distinct functions in an array', false, false, true)
+  unlikeLoosely(
+    t,
+    function () {},
+    function () {},
+    'two distinct functions',
+    false,
+    false,
+    true
+  )
+  unlikeLoosely(
+    t,
+    [function () {}],
+    [function () {}],
+    'two distinct functions in an array',
+    false,
+    false,
+    true
+  )
 
   unlikeLoosely(t, f, {}, 'function and object', false, false, true)
   unlikeLoosely(t, [f], [{}], 'function and object in an array', false, false, true)
@@ -811,9 +728,31 @@ test('functions', function (t) {
 })
 
 test('Errors', function (t) {
-  alike(t, new Error('xyz'), new Error('xyz'), 'two errors of the same type with the same message', true, true, false)
-  unlikeLoosely(t, new Error('xyz'), new TypeError('xyz'), 'two errors of different types with the same message', false, false)
-  unlikeLoosely(t, new Error('xyz'), new Error('zyx'), 'two errors of the same type with a different message', false, false)
+  alike(
+    t,
+    new Error('xyz'),
+    new Error('xyz'),
+    'two errors of the same type with the same message',
+    true,
+    true,
+    false
+  )
+  unlikeLoosely(
+    t,
+    new Error('xyz'),
+    new TypeError('xyz'),
+    'two errors of different types with the same message',
+    false,
+    false
+  )
+  unlikeLoosely(
+    t,
+    new Error('xyz'),
+    new Error('zyx'),
+    'two errors of the same type with a different message',
+    false,
+    false
+  )
 
   // +
   /* t.test('errorlike', { skip: !Object.defineProperty }, function (st) {
@@ -836,7 +775,8 @@ test('Errors', function (t) {
   }) */
 
   // +
-  unlikeLoosely(t,
+  unlikeLoosely(
+    t,
     new Error('a'),
     Object.assign(new Error('a'), { code: 10 }),
     'two otherwise equal errors with different own properties'
@@ -862,26 +802,19 @@ test('Errors', function (t) {
 })
 
 test('object and null', function (t) {
-  unlikeLoosely(t,
-    {},
-    null,
-    'null and an object'
-  )
+  unlikeLoosely(t, {}, null, 'null and an object')
 
   t.end()
 })
 
 test('error = Object', function (t) {
-  unlikeLoosely(t,
-    new Error('a'),
-    { message: 'a' }
-  )
+  unlikeLoosely(t, new Error('a'), { message: 'a' })
 
   t.end()
 })
 
 test('[[Prototypes]]', function (t) {
-  function C () {}
+  function C() {}
   const instance = new C()
   delete instance.constructor
 
@@ -899,7 +832,14 @@ test('[[Prototypes]]', function (t) {
     d2.__proto__ = newProto // eslint-disable-line no-proto
     st.ok(d2 instanceof Date, 'd2 is still a Date instance after tweaking [[Prototype]]')
 
-    alikeLoosely(st, d1, d2, 'two dates with the same timestamp and different [[Prototype]]', true, false)
+    alikeLoosely(
+      st,
+      d1,
+      d2,
+      'two dates with the same timestamp and different [[Prototype]]',
+      true,
+      false
+    )
 
     st.end()
   })
@@ -912,12 +852,20 @@ test('toStringTag', function (t) {
   t.is(Object.prototype.toString.call(o1), '[object Object]', 'o1: Symbol.toStringTag works')
 
   const o2 = {}
-  t.is(Object.prototype.toString.call(o2), '[object Object]', 'o2: original Symbol.toStringTag works')
+  t.is(
+    Object.prototype.toString.call(o2),
+    '[object Object]',
+    'o2: original Symbol.toStringTag works'
+  )
 
   alike(t, o1, o2, 'two normal empty objects', true, true)
 
   o2[Symbol.toStringTag] = 'jifasnif'
-  t.is(Object.prototype.toString.call(o2), '[object jifasnif]', 'o2: modified Symbol.toStringTag works')
+  t.is(
+    Object.prototype.toString.call(o2),
+    '[object jifasnif]',
+    'o2: modified Symbol.toStringTag works'
+  )
 
   unlikeLoosely(t, o1, o2, 'two normal empty objects with different toStringTags', false, false)
 
@@ -961,23 +909,43 @@ test('boxed primitives', function (t) {
 
 test('getters', function (t) {
   const a = {}
-  Object.defineProperty(a, 'a', { enumerable: true, get: function () { return 5 } })
+  Object.defineProperty(a, 'a', {
+    enumerable: true,
+    get: function () {
+      return 5
+    }
+  })
   const b = {}
-  Object.defineProperty(b, 'a', { enumerable: true, get: function () { return 6 } })
+  Object.defineProperty(b, 'a', {
+    enumerable: true,
+    get: function () {
+      return 6
+    }
+  })
 
-  unlikeLoosely(t, a, b, 'two objects with the same getter but producing different values', false, false)
+  unlikeLoosely(
+    t,
+    a,
+    b,
+    'two objects with the same getter but producing different values',
+    false,
+    false
+  )
 
   t.end()
 })
 
 test('fake arrays: extra keys will be tested', function (t) {
-  const a = tag({
-    __proto__: Array.prototype,
-    0: 1,
-    1: 1,
-    2: 'broken',
-    length: 2
-  }, 'Array')
+  const a = tag(
+    {
+      __proto__: Array.prototype,
+      0: 1,
+      1: 1,
+      2: 'broken',
+      length: 2
+    },
+    'Array'
+  )
 
   if (Object.defineProperty) {
     Object.defineProperty(a, 'length', {
@@ -985,7 +953,14 @@ test('fake arrays: extra keys will be tested', function (t) {
     })
   }
 
-  unlikeLoosely(t, a, [1, 1], 'fake and real array with same contents and [[Prototype]]', false, false)
+  unlikeLoosely(
+    t,
+    a,
+    [1, 1],
+    'fake and real array with same contents and [[Prototype]]',
+    false,
+    false
+  )
 
   const b = tag(/abc/, 'Array')
   b.__proto__ = Array.prototype // eslint-disable-line no-proto
@@ -1007,11 +982,7 @@ test('circular references', function (t) {
   const c = {}
   c.b = c
 
-  alike(t,
-    b,
-    c,
-    'two self-referencing objects'
-  )
+  alike(t, b, c, 'two self-referencing objects')
 
   const d = {}
   d.a = 1
@@ -1021,11 +992,7 @@ test('circular references', function (t) {
   e.a = 1
   e.b = e.a
 
-  unlikeLoosely(t,
-    d,
-    e,
-    'two deeply self-referencing objects'
-  )
+  unlikeLoosely(t, d, e, 'two deeply self-referencing objects')
 
   t.end()
 })
@@ -1075,47 +1042,31 @@ test('TypedArrays', function (t) {
     const view1 = new Int8Array(buffer1)
     const view2 = new Int8Array(buffer2)
 
-    alike(st,
-      view1,
-      view2,
-      'Int8Arrays of similar ArrayBuffers'
-    )
+    alike(st, view1, view2, 'Int8Arrays of similar ArrayBuffers')
 
-    alike(st,
-      buffer1,
-      buffer2,
-      'similar ArrayBuffers'
-    )
+    alike(st, buffer1, buffer2, 'similar ArrayBuffers')
 
     for (let i = 0; i < view1.byteLength; i += 1) {
       view1[i] = 9 // change all values to 9's
     }
 
-    unlikeLoosely(st,
-      view1,
-      view2,
-      'Int8Arrays of different ArrayBuffers'
-    )
+    unlikeLoosely(st, view1, view2, 'Int8Arrays of different ArrayBuffers')
 
-    unlikeLoosely(st,
-      buffer1,
-      buffer2,
-      'different ArrayBuffers'
-    )
+    unlikeLoosely(st, buffer1, buffer2, 'different ArrayBuffers')
 
     // node < 0.11 has a nonconfigurable own byteLength property
-    t.test('lies about byteLength', { skip: !('byteLength' in ArrayBuffer.prototype) }, function (s2t) {
-      const empty4 = new ArrayBuffer(4)
-      const empty6 = new ArrayBuffer(6)
-      Object.defineProperty(empty6, 'byteLength', { value: 4 })
+    t.test(
+      'lies about byteLength',
+      { skip: !('byteLength' in ArrayBuffer.prototype) },
+      function (s2t) {
+        const empty4 = new ArrayBuffer(4)
+        const empty6 = new ArrayBuffer(6)
+        Object.defineProperty(empty6, 'byteLength', { value: 4 })
 
-      unlikeLoosely(s2t,
-        empty4,
-        empty6,
-        'different-length ArrayBuffers, one lying'
-      )
-      s2t.end()
-    })
+        unlikeLoosely(s2t, empty4, empty6, 'different-length ArrayBuffers, one lying')
+        s2t.end()
+      }
+    )
 
     st.end()
   })
@@ -1127,27 +1078,15 @@ test('TypedArrays', function (t) {
     const view1 = new Int8Array(buffer1)
     const view2 = new Int8Array(buffer2)
 
-    alike(st,
-      view1,
-      view2,
-      'Int8Arrays of similar SharedArrayBuffers'
-    )
+    alike(st, view1, view2, 'Int8Arrays of similar SharedArrayBuffers')
 
-    alike(st,
-      buffer1,
-      buffer2,
-      'similar SharedArrayBuffers'
-    )
+    alike(st, buffer1, buffer2, 'similar SharedArrayBuffers')
 
     for (let i = 0; i < view1.byteLength; i += 1) {
       view1[i] = 9 // change all values to 9's
     }
 
-    unlikeLoosely(st,
-      view1,
-      view2,
-      'Int8Arrays of different SharedArrayBuffers'
-    )
+    unlikeLoosely(st, view1, view2, 'Int8Arrays of different SharedArrayBuffers')
 
     // +
     /* unlikeLoosely(st,
@@ -1177,13 +1116,15 @@ test('TypedArrays', function (t) {
 })
 
 test('String object', function (t) {
-  alike(t,
+  alike(
+    t,
     new String('hi'), // eslint-disable-line no-new-wrappers
     new String('hi'), // eslint-disable-line no-new-wrappers
     'two same String objects'
   )
 
-  unlike(t,
+  unlike(
+    t,
     new String('hi'), // eslint-disable-line no-new-wrappers
     new String('hi2'), // eslint-disable-line no-new-wrappers
     'two different String objects'
@@ -1191,29 +1132,37 @@ test('String object', function (t) {
 })
 
 test('Number object', function (t) {
-  alike(t,
+  alike(
+    t,
     new Number(1), // eslint-disable-line no-new-wrappers
     new Number(1), // eslint-disable-line no-new-wrappers
     'two same Number objects'
   )
 
-  t.absent(sameObject(
-    new Number(1), // eslint-disable-line no-new-wrappers
-    new Number(2) // eslint-disable-line no-new-wrappers
-  ), 'two different Number objects')
+  t.absent(
+    sameObject(
+      new Number(1), // eslint-disable-line no-new-wrappers
+      new Number(2) // eslint-disable-line no-new-wrappers
+    ),
+    'two different Number objects'
+  )
 })
 
 test('Boolean object', function (t) {
-  alike(t,
+  alike(
+    t,
     new Boolean(true), // eslint-disable-line no-new-wrappers
     new Boolean(true), // eslint-disable-line no-new-wrappers
     'two same Boolean objects'
   )
 
-  t.absent(sameObject(
-    new Boolean(true), // eslint-disable-line no-new-wrappers
-    new Boolean(false) // eslint-disable-line no-new-wrappers
-  ), 'two different Boolean objects')
+  t.absent(
+    sameObject(
+      new Boolean(true), // eslint-disable-line no-new-wrappers
+      new Boolean(false) // eslint-disable-line no-new-wrappers
+    ),
+    'two different Boolean objects'
+  )
 })
 
 test('objects', function (t) {
@@ -1233,9 +1182,23 @@ test('symbols', function (t) {
   unlike(t, Symbol.for('hello'), Symbol.for('holas'), 'diff symbol', false, true)
 
   alike(t, [Symbol.for('hello')], [Symbol.for('hello')], 'symbol inside object', true, true)
-  alike(t, { sym: Symbol.for('hello') }, { sym: Symbol.for('hello') }, 'symbol inside object', true, true)
+  alike(
+    t,
+    { sym: Symbol.for('hello') },
+    { sym: Symbol.for('hello') },
+    'symbol inside object',
+    true,
+    true
+  )
 
-  unlike(t, { sym: Symbol.for('hello') }, { sym: Symbol.for('holas') }, 'diff symbol inside object', false, true)
+  unlike(
+    t,
+    { sym: Symbol.for('hello') },
+    { sym: Symbol.for('holas') },
+    'diff symbol inside object',
+    false,
+    true
+  )
 })
 
 test('numbers', function (t) {
@@ -1288,11 +1251,18 @@ test('promises', function (t) {
     'resolve with different objects'
   ) */
 
-  function noop (resolve, reject) {}
+  function noop(resolve, reject) {}
 })
 
 test('functions', function (t) {
-  unlike(t, function () {}, function () {}, 'two different functions', true, true)
+  unlike(
+    t,
+    function () {},
+    function () {},
+    'two different functions',
+    true,
+    true
+  )
 
   const fn = function () {}
   alike(t, fn, fn, 'two same functions', true, true)
@@ -1341,59 +1311,73 @@ test('circular references x2', function (t) {
   alike(t, obj13, obj14)
 })
 
-function alike (t, a, b, comment = '') {
+function alike(t, a, b, comment = '') {
   try {
     t.ok(deepEqual(a, b, { strict: true }), '[deep-equal normal] ' + comment)
     t.ok(deepEqual(b, a, { strict: true }), '[deep-equal reversed] ' + comment)
   } catch (error) {
-    if (error.message === 'Cannot convert a Symbol value to a string') t.comment('alike => ' + error.message + ' [deep-equal] ' + comment)
-    else throw error
+    if (error.message === 'Cannot convert a Symbol value to a string') {
+      t.comment('alike => ' + error.message + ' [deep-equal] ' + comment)
+    } else {
+      throw error
+    }
   }
 
   t.ok(sameObject(a, b, { strict: true }), '[same-object normal] ' + comment)
   t.ok(sameObject(b, a, { strict: true }), '[same-object reversed] ' + comment)
 }
 
-function alikeLoosely (t, a, b, comment = '') { // eslint-disable-line no-unused-vars
+function alikeLoosely(t, a, b, comment = '') {
+  // eslint-disable-line no-unused-vars
   try {
     t.ok(deepEqual(a, b, { strict: false }), '[deep-equal normal] ' + comment)
     t.ok(deepEqual(b, a, { strict: false }), '[deep-equal reversed] ' + comment)
   } catch (error) {
-    if (error.message === 'Cannot convert a Symbol value to a string') t.comment('alike loosely => ' + error.message + ' [deep-equal] ' + comment)
-    else throw error
+    if (error.message === 'Cannot convert a Symbol value to a string') {
+      t.comment('alike loosely => ' + error.message + ' [deep-equal] ' + comment)
+    } else {
+      throw error
+    }
   }
 
   t.ok(sameObject(a, b, { strict: false }), '[same-object normal] ' + comment)
   t.ok(sameObject(b, a, { strict: false }), '[same-object reversed] ' + comment)
 }
 
-function unlike (t, a, b, comment = '') {
+function unlike(t, a, b, comment = '') {
   try {
     t.absent(deepEqual(a, b, { strict: true }), '[deep-equal normal] ' + comment)
     t.absent(deepEqual(b, a, { strict: true }), '[deep-equal reversed] ' + comment)
   } catch (error) {
-    if (error.message === 'Cannot convert a Symbol value to a string') t.comment('unlike => ' + error.message + ' [deep-equal] ' + comment)
-    else throw error
+    if (error.message === 'Cannot convert a Symbol value to a string') {
+      t.comment('unlike => ' + error.message + ' [deep-equal] ' + comment)
+    } else {
+      throw error
+    }
   }
 
   t.absent(sameObject(a, b, { strict: true }), '[same-object normal] ' + comment)
   t.absent(sameObject(b, a, { strict: true }), '[same-object reversed] ' + comment)
 }
 
-function unlikeLoosely (t, a, b, comment = '') { // eslint-disable-line no-unused-vars
+function unlikeLoosely(t, a, b, comment = '') {
+  // eslint-disable-line no-unused-vars
   try {
     t.absent(deepEqual(a, b, { strict: false }), '[deep-equal normal] ' + comment)
     t.absent(deepEqual(b, a, { strict: false }), '[deep-equal reversed] ' + comment)
   } catch (error) {
-    if (error.message === 'Cannot convert a Symbol value to a string') t.comment('unlike loosely => ' + error.message + ' [deep-equal] ' + comment)
-    else throw error
+    if (error.message === 'Cannot convert a Symbol value to a string') {
+      t.comment('unlike loosely => ' + error.message + ' [deep-equal] ' + comment)
+    } else {
+      throw error
+    }
   }
 
   t.absent(sameObject(a, b, { strict: false }), '[same-object normal] ' + comment)
   t.absent(sameObject(b, a, { strict: false }), '[same-object reversed] ' + comment)
 }
 
-function tag (obj, value) {
+function tag(obj, value) {
   Object.defineProperty(obj, Symbol.toStringTag, { value })
   return obj
 }
