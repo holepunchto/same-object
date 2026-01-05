@@ -19,7 +19,6 @@
   },
   "homepage": "https://github.com/holepunchto/same-object",
   "devDependencies": {
-    "bare-utils": "^1.0.0",
     "brittle": "^3.1.1",
     "deep-equal": "^2.2.0",
     "lunte": "^1.0.0",
